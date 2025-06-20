@@ -214,35 +214,60 @@ export default function OrdersTab() {
               <p className="text-center text-gray-500 py-4">No transactions found.</p>
             ) : (
               <TableBody>
-                {currentOrders.map((order) => (
-                  <TableRow>
-                    <TableCell className="font-medium">{order._id}</TableCell>
-                    <TableCell>{order.userId}</TableCell>
-                    <TableCell className="text-center hidden md:table-cell">{order.items[0].giftName} </TableCell>
-                    <TableCell className="text-center hidden md:table-cell">
-                      {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "N/A"}
-                    </TableCell>
-                    <TableCell className="text-center">#{order.items[0].totalPrice}</TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={getVariant(order.status)}>{order.status}</Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => updateOrder(order._id, "processing")}>processing</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateOrder(order._id, "shipped")}>shipped</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateOrder(order._id, "delivered")}>delivered</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateOrder(order._id, "cancelled")}>cancelled</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {currentOrders.map((order) => {
+                  // Calculate the total amount for all items in the order
+                  const totalAmount = order.items.reduce(
+                    (sum, item) => sum + item.totalPrice, 0
+                  );
+
+                  return (
+                    <TableRow key={order._id}>
+                      <TableCell className="font-medium">{order._id}</TableCell>
+                      <TableCell>{order.userId}</TableCell>
+                      <TableCell className="text-center hidden md:table-cell">
+                        <div className="flex flex-col gap-1">
+                          {order.items.map((item) => (
+                            <div key={item._id}>
+                              {item.giftName} (Qty: {item.quantity})
+                            </div>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center hidden md:table-cell">
+                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "N/A"}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        #{totalAmount.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant={getVariant(order.status)}>{order.status}</Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => updateOrder(order._id, "processing")}>
+                              processing
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => updateOrder(order._id, "shipped")}>
+                              shipped
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => updateOrder(order._id, "delivered")}>
+                              delivered
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => updateOrder(order._id, "cancelled")}>
+                              cancelled
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             )}
           </Table>
