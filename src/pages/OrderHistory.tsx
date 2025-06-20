@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { NotebookPen, RotateCw, Star, X } from 'lucide-react'
-import gloss from '../assets/lipgloss.svg'
 import MobileBottomNav from '../../components/MobileNavTab'
 import axios from 'axios'
 import { toast } from 'sonner'
@@ -24,6 +23,7 @@ interface OrderItem {
   unitPrice: number
   totalPrice: number
   _id: string
+  giftUrl: string
 }
 
 function buildTimeline(currentStatus: string, updatedAt: string) {
@@ -189,34 +189,41 @@ export default function OrderHistory() {
                 </a> */}
                 </div>
 
-                <div className='border rounded-lg overflow-hidden bg-gray-50 mx-3'>
-                  <div className='h-36 bg-gray-100'>
-                    <img
-                      src={gloss}
-                      alt='A set of lip gloss'
-                      className='w-full h-full object-cover'
-                    />
-                  </div>
-                  <div className='p-3 text-center flex gap-5 justify-between'>
-                    <h4 className='font-semibold'>
-                      {singleOrder.items[0]?.giftName}
-                    </h4>
-                    <p className='text-sm font-semibold text-gray-600'>
-                      {singleOrder.items[0]?.quantity}
-                    </p>
-                    <p className='text-sm font-semibold text-gray-600'>
-                      {new Intl.NumberFormat('en-NG', {
-                        style: 'currency',
-                        currency: 'NGN',
-                      }).format(singleOrder.items[0]?.unitPrice)}
-                    </p>
-                    <p className='text-sm font-semibold text-gray-600'>
-                      {new Intl.NumberFormat('en-NG', {
-                        style: 'currency',
-                        currency: 'NGN',
-                      }).format(singleOrder.items[0]?.totalPrice)}
-                    </p>
-                  </div>
+                {/* Items List */}
+                <div className='space-y-4 mx-3'>
+                  {singleOrder.items.map((item) => (
+                    <div key={item._id} className='border rounded-lg overflow-hidden bg-gray-50'>
+                      <div className='h-36 bg-gray-100'>
+                        <img
+                          src={item.giftUrl} // You might want to use different images for different items
+                          alt={item.giftName}
+                          className='w-full h-full object-cover'
+                        />
+                      </div>
+                      <div className='p-3'>
+                        <div className='flex justify-between items-center'>
+                          <h4 className='font-semibold'>{item.giftName}</h4>
+                          <p className='text-sm font-semibold text-gray-600'>
+                            Qty: {item.quantity}
+                          </p>
+                        </div>
+                        <div className='flex justify-between mt-2'>
+                          <p className='text-sm font-semibold text-gray-600'>
+                            Unit Price: {new Intl.NumberFormat('en-NG', {
+                              style: 'currency',
+                              currency: 'NGN',
+                            }).format(item.unitPrice)}
+                          </p>
+                          <p className='text-sm font-semibold'>
+                            Total: {new Intl.NumberFormat('en-NG', {
+                              style: 'currency',
+                              currency: 'NGN',
+                            }).format(item.totalPrice)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
                 {/* Action Buttons */}
                 <div className='flex flex-wrap md:gap-5 gap-7 mt-20 pl-8'>
