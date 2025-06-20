@@ -5,6 +5,7 @@ import { X, Upload, AlertCircle } from "lucide-react"
 import SuccessModal from "./SuccessModal"
 import { toast } from "sonner"
 import { useCart } from '../src/store/useCart';
+import { config } from "@/src/config";
 
 
 interface BankTransferModalProps {
@@ -161,7 +162,7 @@ export default function BankTransferModal({
 
 
             const response = await axios.post(
-                "/api/payment/pay-invoice-transfer/",
+                `${config.BACKEND_URL}/api/payment/pay-invoice-transfer`,
                 formData,
                 {
                     headers: {
