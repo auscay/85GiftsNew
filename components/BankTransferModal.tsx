@@ -161,7 +161,7 @@ export default function BankTransferModal({
 
 
             const response = await axios.post(
-                "/api/payment/pay-invoice-transfer/",
+                "/api/payment/pay-invoice-transfer",
                 formData,
                 {
                     headers: {
