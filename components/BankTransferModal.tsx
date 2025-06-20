@@ -161,7 +161,7 @@ export default function BankTransferModal({
 
 
             const response = await axios.post(
-                "/api/api/payment/pay-invoice-transfer/",
+                "/api/payment/pay-invoice-transfer/",
                 formData,
                 {
                     headers: {
@@ -225,8 +225,8 @@ export default function BankTransferModal({
                                     <div className="text-gray-600">Branch Code:</div>
                                     <div className="font-medium text-black">{accountDetails.branchCode}</div>
 
-                                    <div className="text-gray-600">Reference:</div>
-                                    <div className="font-medium text-black">{accountDetails.reference}</div>
+                                    {/* <div className="text-gray-600">Reference:</div>
+                                    <div className="font-medium text-black">{accountDetails.reference}</div> */}
                                 </div>
                             </div>
 
